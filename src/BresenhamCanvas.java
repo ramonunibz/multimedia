@@ -26,7 +26,8 @@ public class BresenhamCanvas extends JComponent {
         int length = getHeight();
         g.clearRect(0, 0, width, length);
         drawGrid(g);
-        drawLine(g, 0, 25, 30, 20);
+        drawLine(g, 0, 0, 30, 5);
+        //drawCircle(g, 16,16,15);
         // 1. Clears background
         // 2. Draws grid
         // 3. Draws all stored points, calls drawDot(...)
@@ -75,10 +76,16 @@ public class BresenhamCanvas extends JComponent {
             drawLine4(g, x1, y1, x2, y2, dx, dy);
         } else if (dy < 0 && dx > 0 && dx >= (-dy)) {
             drawLine5(g, x1, y1, x2, y2, dx, dy);
+        } else if (dy < 0 && dx > 0 && dx <= (-dy)) {
+            drawLine6(g, x1, y1, x2, y2, dx, dy);
+        } else if (dx < dy && dx * (-1) >= 0 && dy < 0) {
+            drawLine7(g, x1, y1, x2, y2, dx, dy);
+        } else if (dx <= 0 && dy <= 0) {
+            drawLine8(g, x1, y1, x2, y2, dx, dy);
         }
     }
 
-    public void drawLine1(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine1(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //1&7
         int d = 2 * dy - dx;
         int incrE = 2 * dy;
         int incrNE = 2 * (dy - dx);
@@ -95,7 +102,7 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine2(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine2(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //2&8
         int d = 2 * dx - dy;
         int incrN = 2 * dx;
         int incrNE = 2 * (dx - dy);
@@ -112,11 +119,11 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine3(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine3(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //3&5
         int d = 2 * dy + dx;
         int incrW = 2 * dy;
         int incrNW = 2 * (dy + dx);
-        drawDot(g, x1, y1 + 1);
+        drawDot(g, x1, y1 );
         int y = y1;
         for (int x = x1 - 1; x > x2; x--) {
             if (d <= 0) {
@@ -125,15 +132,15 @@ public class BresenhamCanvas extends JComponent {
                 d = d + incrNW;
                 y++;
             }
-            drawDot(g, x + 1, y + 1);
+            drawDot(g, x , y);
         }
     }
 
-    public void drawLine4(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine4(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //4&6
         int d = 2 * (-dx) - dy;
         int incrN = 2 * (-dx);
         int incrNW = 2 * ((-dx) - dy);
-        drawDot(g, x1, y1 + 1);
+        drawDot(g, x1 + 1, y1 + 1);
         int x = x1;
         for (int y = y1 + 1; y < y2; y++) {
             if (d <= 0) {
@@ -142,7 +149,7 @@ public class BresenhamCanvas extends JComponent {
                 d = d + incrNW;
                 x--;
             }
-            drawDot(g, x, y + 1);
+            drawDot(g, x + 1, y + 1);
         }
     }
 
@@ -150,7 +157,7 @@ public class BresenhamCanvas extends JComponent {
         int d = 2 * (-dy) - dx;
         int incrE = 2 * (-dy);
         int incrSE = 2 * ((-dy) - dx);
-        drawDot(g, x1 + 1, y1 + 1);
+        drawDot(g, x1 + 1, y1 );
         int y = y1;
         for (int x = x1 + 1; x < x2; x++) {
             if (d <= 0) {
@@ -159,7 +166,89 @@ public class BresenhamCanvas extends JComponent {
                 d = d + incrSE;
                 y--;
             }
+            drawDot(g, x + 1, y );
+        }
+    }
+
+    public void drawLine6(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+        int d = 2 * dx + dy;
+        int incrS = 2 * dx;
+        int incrSE = 2 * (dx + dy);
+        drawDot(g, x1 + 1, y1);
+        int x = x1;
+        for (int y = y1 - 1; y > y2; y--) {
+            if (d <= 0) {
+                d = d + incrS;
+            } else {
+                d = d + incrSE;
+                x++;
+            }
+            drawDot(g, x + 1, y);
+        }
+    }
+
+    public void drawLine7(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+        int d = 2 * (-dy) + dx;
+        int incrW = 2 * (-dy);
+        int incrSW = 2 * ((-dy) + dx);
+        drawDot(g, x1 , y1 + 1);
+        int y = y1;
+        for (int x = x1 - 1; x >= x2; x--) {
+            if (d <= 0) {
+                d = d + incrW;
+            } else {
+                d = d + incrSW;
+                y--;
+            }
             drawDot(g, x + 1, y + 1);
         }
     }
+
+    public void drawLine8(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+        int d = 2 * (-dx) + dy;
+        int incrS = 2 * (-dx);
+        int incrSW = 2 * ((-dx) + dy);
+        drawDot(g, x1 + 1, y1 );
+        int x = x1;
+        for (int y = y1 - 1; y >= y2; y--) {
+            if (d <= 0) {
+                d = d + incrS;
+            } else {
+                d = d + incrSW;
+                x--;
+            }
+            drawDot(g, x + 1, y + 1);
+        }
+    }
+
+    public void drawCircle(Graphics g, int x1, int y1, int r){
+        int x, y, d;
+        d=1-r;
+
+        x=0;
+        y=r;
+
+        while(x<=y){
+            drawDot(g,x+x1,y+y1);
+            drawDot(g,x+x1,-y+y1);
+            drawDot(g,-x+x1,y+y1);
+            drawDot(g,-x+x1,-y+y1);
+
+            drawDot(g,y+x1,x+y1);
+            drawDot(g,y+x1,-x+y1);
+            drawDot(g,-y+x1,x+y1);
+            drawDot(g,-y+x1,- x+y1);
+
+            if(d>0){
+                x++;
+                y--;
+
+                d+=4*(x-y)+10;
+            }else{
+                x++;
+                d+=4*x+6;
+            }
+        }
+    }
+
 }
