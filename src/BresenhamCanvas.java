@@ -26,8 +26,17 @@ public class BresenhamCanvas extends JComponent {
         int length = getHeight();
         g.clearRect(0, 0, width, length);
         drawGrid(g);
-        drawLine(g, 0, 0, 30, 5);
-        //drawCircle(g, 16,16,15);
+        drawLine(g, 12, 15, 0, 4);
+        drawLine(g, 0, 4, 12, 11);
+        drawLine(g, 12, 11, 15, 0);
+        drawLine(g, 15, 0, 18, 11);
+        drawLine(g, 18, 11, 29, 4);
+        drawLine(g, 29, 4, 18, 15);
+        drawLine(g, 18, 15, 25, 29);
+        drawLine(g, 25, 29, 15, 17);
+        drawLine(g, 15, 17, 5, 29);
+        drawLine(g, 5, 29, 12, 15);
+        drawCircle(g, 15,15,14);
         // 1. Clears background
         // 2. Draws grid
         // 3. Draws all stored points, calls drawDot(...)
@@ -67,31 +76,31 @@ public class BresenhamCanvas extends JComponent {
         int dx = x2 - x1;
         int dy = y2 - y1;
         if (dx >= dy && dx >= 0 && dy >= 0) {
-            drawLine1(g, x1, y1, x2, y2, dx, dy);
+            drawLine1(g, x1, y1, x2, dx, dy);
         } else if (dx >= 0 && dy >= 0) {
-            drawLine2(g, x1, y1, x2, y2, dx, dy);
+            drawLine2(g, x1, y1, y2, dx, dy);
         } else if (dy >= 0 && (dx * (-1) >= dy)) {
-            drawLine3(g, x1, y1, x2, y2, dx, dy);
+            drawLine3(g, x1, y1, x2, dx, dy);
         } else if (dy >= 0 && (dx * (-1) <= dy)) {
-            drawLine4(g, x1, y1, x2, y2, dx, dy);
+            drawLine4(g, x1, y1, y2, dx, dy);
         } else if (dy < 0 && dx > 0 && dx >= (-dy)) {
-            drawLine5(g, x1, y1, x2, y2, dx, dy);
+            drawLine5(g, x1, y1, x2, dx, dy);
         } else if (dy < 0 && dx > 0 && dx <= (-dy)) {
-            drawLine6(g, x1, y1, x2, y2, dx, dy);
+            drawLine6(g, x1, y1, y2, dx, dy);
         } else if (dx < dy && dx * (-1) >= 0 && dy < 0) {
-            drawLine7(g, x1, y1, x2, y2, dx, dy);
+            drawLine7(g, x1, y1, x2, dx, dy);
         } else if (dx <= 0 && dy <= 0) {
-            drawLine8(g, x1, y1, x2, y2, dx, dy);
+            drawLine8(g, x1, y1, y2, dx, dy);
         }
     }
 
-    public void drawLine1(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //1&7
+    public void drawLine1(Graphics g, int x1, int y1, int x2, int dx, int dy) {     //1&7
         int d = 2 * dy - dx;
         int incrE = 2 * dy;
         int incrNE = 2 * (dy - dx);
         drawDot(g, x1 + 1, y1 + 1);
         int y = y1;
-        for (int x = x1 + 1; x < x2; x++) {
+        for (int x = x1 + 1; x <= x2; x++) {
             if (d <= 0) {
                 d = d + incrE;
             } else {
@@ -102,13 +111,13 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine2(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //2&8
+    public void drawLine2(Graphics g, int x1, int y1, int y2, int dx, int dy) {     //2&8
         int d = 2 * dx - dy;
         int incrN = 2 * dx;
         int incrNE = 2 * (dx - dy);
         drawDot(g, x1 + 1, y1 + 1);
         int x = x1;
-        for (int y = y1 + 1; y < y2; y++) {
+        for (int y = y1 + 1; y <= y2; y++) {
             if (d <= 0) {
                 d = d + incrN;
             } else {
@@ -119,30 +128,30 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine3(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //3&5
+    public void drawLine3(Graphics g, int x1, int y1, int x2, int dx, int dy) {     //3&5
         int d = 2 * dy + dx;
         int incrW = 2 * dy;
         int incrNW = 2 * (dy + dx);
-        drawDot(g, x1, y1 );
+        drawDot(g, x1 + 1, ++y1);
         int y = y1;
-        for (int x = x1 - 1; x > x2; x--) {
+        for (int x = x1; x > x2; x--) {
             if (d <= 0) {
                 d = d + incrW;
             } else {
                 d = d + incrNW;
                 y++;
             }
-            drawDot(g, x , y);
+            drawDot(g, x, y);
         }
     }
 
-    public void drawLine4(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {     //4&6
+    public void drawLine4(Graphics g, int x1, int y1, int y2, int dx, int dy) {     //4&6
         int d = 2 * (-dx) - dy;
         int incrN = 2 * (-dx);
         int incrNW = 2 * ((-dx) - dy);
-        drawDot(g, x1 + 1, y1 + 1);
+        drawDot(g, x1 + 1, ++y1);
         int x = x1;
-        for (int y = y1 + 1; y < y2; y++) {
+        for (int y = y1; y <= y2; y++) {
             if (d <= 0) {
                 d = d + incrN;
             } else {
@@ -153,30 +162,30 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine5(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine5(Graphics g, int x1, int y1, int x2, int dx, int dy) {
         int d = 2 * (-dy) - dx;
         int incrE = 2 * (-dy);
         int incrSE = 2 * ((-dy) - dx);
-        drawDot(g, x1 + 1, y1 );
+        drawDot(g, x1 + 1, ++y1);
         int y = y1;
-        for (int x = x1 + 1; x < x2; x++) {
+        for (int x = x1 + 1; x <= x2; x++) {
             if (d <= 0) {
                 d = d + incrE;
             } else {
                 d = d + incrSE;
                 y--;
             }
-            drawDot(g, x + 1, y );
+            drawDot(g, x + 1, y);
         }
     }
 
-    public void drawLine6(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine6(Graphics g, int x1, int y1, int y2, int dx, int dy) {
         int d = 2 * dx + dy;
         int incrS = 2 * dx;
         int incrSE = 2 * (dx + dy);
-        drawDot(g, x1 + 1, y1);
+        drawDot(g, x1 + 1, y1 + 1);
         int x = x1;
-        for (int y = y1 - 1; y > y2; y--) {
+        for (int y = y1; y > y2; y--) {
             if (d <= 0) {
                 d = d + incrS;
             } else {
@@ -187,11 +196,11 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine7(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine7(Graphics g, int x1, int y1, int x2, int dx, int dy) {
         int d = 2 * (-dy) + dx;
         int incrW = 2 * (-dy);
         int incrSW = 2 * ((-dy) + dx);
-        drawDot(g, x1 , y1 + 1);
+        drawDot(g, x1 + 1, y1 + 1);
         int y = y1;
         for (int x = x1 - 1; x >= x2; x--) {
             if (d <= 0) {
@@ -204,11 +213,11 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawLine8(Graphics g, int x1, int y1, int x2, int y2, int dx, int dy) {
+    public void drawLine8(Graphics g, int x1, int y1, int y2, int dx, int dy) {
         int d = 2 * (-dx) + dy;
         int incrS = 2 * (-dx);
         int incrSW = 2 * ((-dx) + dy);
-        drawDot(g, x1 + 1, y1 );
+        drawDot(g, x1 + 1, y1 + 1);
         int x = x1;
         for (int y = y1 - 1; y >= y2; y--) {
             if (d <= 0) {
@@ -221,32 +230,34 @@ public class BresenhamCanvas extends JComponent {
         }
     }
 
-    public void drawCircle(Graphics g, int x1, int y1, int r){
+    public void drawCircle(Graphics g, int x1, int y1, int r) {
+        x1++;
+        y1++;
         int x, y, d;
-        d=1-r;
+        d = 1 - r;
 
-        x=0;
-        y=r;
+        x = 0;
+        y = r;
 
-        while(x<=y){
-            drawDot(g,x+x1,y+y1);
-            drawDot(g,x+x1,-y+y1);
-            drawDot(g,-x+x1,y+y1);
-            drawDot(g,-x+x1,-y+y1);
+        while (x <= y) {
+            drawDot(g, x + x1, y + y1);
+            drawDot(g, x + x1, -y + y1);
+            drawDot(g, -x + x1, y + y1);
+            drawDot(g, -x + x1, -y + y1);
 
-            drawDot(g,y+x1,x+y1);
-            drawDot(g,y+x1,-x+y1);
-            drawDot(g,-y+x1,x+y1);
-            drawDot(g,-y+x1,- x+y1);
+            drawDot(g, y + x1, x + y1);
+            drawDot(g, y + x1, -x + y1);
+            drawDot(g, -y + x1, x + y1);
+            drawDot(g, -y + x1, -x + y1);
 
-            if(d>0){
+            if (d > 0) {
                 x++;
                 y--;
 
-                d+=4*(x-y)+10;
-            }else{
+                d += 4 * (x - y) + 10;
+            } else {
                 x++;
-                d+=4*x+6;
+                d += 4 * x + 6;
             }
         }
     }
