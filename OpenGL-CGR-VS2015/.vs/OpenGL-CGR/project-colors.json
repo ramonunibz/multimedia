@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "249ed670-7029-4e84-97fe-56bf8d853b26": {
+      "ProjectGuid": "249ed670-7029-4e84-97fe-56bf8d853b26",
+      "DisplayName": "OpenGL-CGR",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
