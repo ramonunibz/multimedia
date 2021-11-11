@@ -44,10 +44,10 @@ void drawBuildingType1()
 {
 	glBegin(GL_POLYGON);
 		glColor3f(0.3, 0.5, 0.7);
-		glVertex3f(-0.4, -5.0, 0.0);
-		glVertex3f(0.4, -5.0, 0.0);
-		glVertex3f(0.4, 5.0, 0.0);
-		glVertex3f(-0.4, 5.0, 0.0);
+		glVertex3f(-0.8, -5.0, 0.0);
+		glVertex3f(0.8, -5.0, 0.0);
+		glVertex3f(0.8, 5.0, 0.0);
+		glVertex3f(-0.8, 5.0, 0.0);
 	glEnd();
 }
 
@@ -62,7 +62,7 @@ void display()
 	drawRiver();
 	drawSky();
 	glPushMatrix();
-		glTranslatef(-19.5, 0.0, 0.0);
+		glTranslatef(-17.5, 0.0, 0.0);
 		drawBuildingType1();
 		glTranslatef(5.0, 0.0, 0.0);
 		drawBuildingType1();
