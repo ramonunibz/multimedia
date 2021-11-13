@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <time.h>  
 
 void drawRiver()
 {
@@ -25,7 +26,7 @@ void drawSky()
 	glEnd();
 }
 
-void drawCircle()
+void drawMoon()
 {
 	int triangleAmount = 180;
 	glBegin(GL_TRIANGLE_FAN);
@@ -40,6 +41,57 @@ void drawCircle()
 	glEnd();
 }
 
+void drawStars()
+{
+	
+	glBegin(GL_LINES);
+		glColor3f(1, 1, 0);
+		
+		//star 1
+		glVertex2f(0, 0);
+		glVertex2f(0.2, 0.1);
+
+		glVertex2f(0.2, 0);
+		glVertex2f(0, 0.1);
+		
+		// star 2
+		glVertex2f(0.8, 1.5);
+		glVertex2f(1.1, 1.7);
+
+		glVertex2f(1.1, 1.5);
+		glVertex2f(0.8, 1.7);
+		// star 3
+		glVertex2f(0.8, 3.5);
+		glVertex2f(1.1, 3.7);
+
+		glVertex2f(1.1, 3.5);
+		glVertex2f(0.8, 3.7);
+
+		
+	glEnd();
+}
+
+void drawWindowBuilding1()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.9608, 0.9608, 0.8627);
+		glVertex3f(-0.6, 4.4, 0.0);
+		glVertex3f(-0.1, 4.4, 0.0);
+		glVertex3f(-0.1, 4.9, 0.0);
+		glVertex3f(-0.6, 4.9, 0.0);
+	glEnd();
+}
+
+void drawDoorBuilding1() {
+	glBegin(GL_POLYGON);
+		glColor3f(0.5412, 0.4, 0.2588);
+		glVertex3f(-0.3, -5.0, 0);
+		glVertex3f(0.3, -5.0, 0);
+		glVertex3f(0.3, -4.5, 0);
+		glVertex3f(-0.3, -4.5, 0);
+	glEnd();
+}
+
 void drawBuildingType1()
 {
 	glBegin(GL_POLYGON);
@@ -49,11 +101,166 @@ void drawBuildingType1()
 		glVertex3f(0.8, 5.0, 0.0);
 		glVertex3f(-0.8, 5.0, 0.0);
 	glEnd();
+	glPushMatrix();
+		for (int i = 0; i < 12; i++) {
+			drawWindowBuilding1();
+			glTranslatef(0.7, 0, 0);
+			drawWindowBuilding1();
+			glTranslatef(0, -0.7, 0);
+			drawWindowBuilding1();
+			glTranslatef(-0.7, 0, 0);
+			drawWindowBuilding1();
+		}
+		
+	glPopMatrix();
+	drawDoorBuilding1();
+}
+
+void drawWindowBuilding2()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.9608, 0.9608, 0.8627);
+		glVertex3f(-12.1, 1.3, 0.0);
+		glVertex3f(-11.4, 1.3, 0.0);
+		glVertex3f(-11.4, 1.8, 0.0);
+		glVertex3f(-12.1, 1.8, 0.0);
+	glEnd();
+
+}
+
+void drawDoorBuilding2() {
+	glBegin(GL_POLYGON);
+	glColor3f(0.5412, 0.4, 0.2588);
+	glVertex3f(-10, -5.0, 0);
+	glVertex3f(-8.95, -5.0, 0);
+	glVertex3f(-8.95, -4.3, 0);
+	glVertex3f(-10, -4.3, 0);
+	glEnd();
+}
+
+void drawBuildingType2()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.6, 0.5, 0.7);
+		glVertex3f(-12.3, -5.0, 0.0);
+		glVertex3f(-6.8, -5.0, 0.0);
+		glVertex3f(-6.8, 2.0, 0.0);
+		glVertex3f(-12.3, 2.0, 0.0);
+	glEnd();
+	glPushMatrix();
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 5; j++) {
+			drawWindowBuilding2();
+			glTranslatef(1.1, 0.0, 0.0);
+		}
+		glTranslatef(-5.5, -1.0, 0.0);
+	}
+	glPopMatrix();
+	
+	drawDoorBuilding2();
+}
+
+void drawWindowBuilding3()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.827, 0.827, 0.827);
+		glVertex3f(-24.8, -3.6, 0.0);
+		glVertex3f(-23.0, -3.6, 0.0);
+		glVertex3f(-23.0, -2.7, 0.0);
+		glVertex3f(-24.8, -2.7, 0.0);
+	glEnd();
+
+}
+
+void drawDoorBuilding3() {
+	glBegin(GL_POLYGON);
+		glColor3f(0.5412, 0.4, 0.2588);
+		glVertex3f(-20.5, -5.0, 0);
+		glVertex3f(-19.6, -5.0, 0);
+		glVertex3f(-19.6, -4.3, 0);
+		glVertex3f(-20.5, -4.3, 0);
+	glEnd();
+}
+
+void drawBuildingType3()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.3, 0.3, 0.3);
+		glVertex3f(-25, -5.0, 0.0);
+		glVertex3f(-15.1, -5.0, 0.0);
+		glVertex3f(-15.1, -2.5, 0.0);
+		glVertex3f(-25, -2.5, 0.0);
+	glEnd();
+	glPushMatrix();
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				drawWindowBuilding3();
+				glTranslatef(0, -1.2, 0);
+			}
+			glTranslatef(2.4, 2.4, 0);
+		}
+		glTranslatef(0.5, 0, 0);
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				drawWindowBuilding3();
+				glTranslatef(0, -1.2, 0);
+			}
+			glTranslatef(2.4, 2.4, 0);
+		}
+	glPopMatrix();
+	drawDoorBuilding3();
+}
+
+void drawBuildingType4() {
+	glPushMatrix();
+		glScalef(1.3,1.3,0);
+		glTranslatef(9, 1.15, 0);
+		drawBuildingType1();
+	glPopMatrix();
+}
+
+void drawWindowBuilding5()
+{
+	glBegin(GL_POLYGON);
+	glColor3f(0.9608, 0.9608, 0.8627);
+	glVertex3f(-6.8, 7.4, 0.0);
+	glVertex3f(-6.4, 7.4, 0.0);
+	glVertex3f(-6.4, 7.8, 0.0);
+	glVertex3f(-6.8, 7.8, 0.0);
+	glEnd();
+}
+
+void drawBuildingType5()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.6667, 0.6627, 0.6784);
+		glVertex3f(-7, -5.0, 0.0);
+		glVertex3f(-1, -5.0, 0.0);
+		glVertex3f(-1, 8.0, 0.0);
+		glVertex3f(-7, 8.0, 0.0);
+	glEnd();
+	glPushMatrix();
+	drawWindowBuilding5();
+		for (int i = 0; i < 23; i++) {
+			for (int j = 0; j < 11; j++) {
+				drawWindowBuilding5();
+				glTranslatef(0.52, 0, 0);
+			}
+			glTranslatef(-5.72, -0.52, 0);
+		}
+	glPopMatrix();
+
+	
+	
 }
 
 //render method (callback-function)
 void display()
 {
+	srand(time(NULL));
+	double randomX;
+	double randomY;
 	//clear all pixels
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
@@ -61,7 +268,20 @@ void display()
 	glColor3f(0.0, 0.0, 0.0);
 	drawRiver();
 	drawSky();
+	
+	for (int i = 0; i < 100; i++) {
+			glPushMatrix();
+				randomX = rand() % 4000 / 100.0 - 20.0;
+				randomY = rand() % 2000 / 100.0 - 3.0;
+				glTranslatef(randomX, randomY, 0.0);
+				drawStars();
+			glPopMatrix();
+	}
+
+	
 	glPushMatrix();
+		drawBuildingType5();
+		drawBuildingType4();
 		glTranslatef(-17.5, 0.0, 0.0);
 		drawBuildingType1();
 		glTranslatef(5.0, 0.0, 0.0);
@@ -72,8 +292,20 @@ void display()
 		drawBuildingType1();
 		glTranslatef(15.0, 0.0, 0.0);
 		drawBuildingType1();
+		drawBuildingType2();
+		glTranslatef(-15.0, 0.0, 0.0);
+		drawBuildingType2();
+		glTranslatef(30.0, 0.0, 0.0);
+		drawBuildingType2();
+		drawBuildingType3();
+		glTranslatef(-25.0, 0.0, 0.0);
+		drawBuildingType3();
+		
 	glPopMatrix();
-	drawCircle();
+	glPushMatrix();
+	glTranslatef(-18, 8, 0);
+		drawMoon();
+	glPopMatrix();
 	//don't wait! process buffered OpenGL routines
 	glFlush();	
 }
@@ -101,8 +333,10 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
 	//initialize window size and position. open window
-	glutInitWindowSize(960, 480);
-	glutInitWindowPosition(960, 405);
+	//glutInitWindowSize(960, 480);
+	glutInitWindowSize(1920, 960);
+	//glutInitWindowPosition(960, 405);
+	glutInitWindowPosition(0, 0);
 	glutCreateWindow("OpenGL - CGR");
 
 	//call initialization routine
