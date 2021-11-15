@@ -169,6 +169,18 @@ void drawWindowBuilding3()
 		glVertex3f(-23.0, -2.7, 0.0);
 		glVertex3f(-24.8, -2.7, 0.0);
 	glEnd();
+	glBegin(GL_LINES);
+		glPushMatrix();
+			glColor3f(0.0, 0.0, 0.0);
+
+			glVertex3f(-23.9, -2.71, 0);
+			glVertex3f(-23.9, -3.60, 0);
+
+			glVertex3f(-24.79, -3.15, 0);
+			glVertex3f(-22.99, -3.15, 0);
+
+		glPopMatrix();
+	glEnd();
 
 }
 
@@ -180,7 +192,15 @@ void drawDoorBuilding3() {
 		glVertex3f(-19.6, -4.3, 0);
 		glVertex3f(-20.5, -4.3, 0);
 	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0, 0.0, 0.0);
+	glVertex3f(-20.05, -4.3, 0);
+	glVertex3f(-20.05, -5.0, 0);
+	glPopMatrix();
+	glEnd();
 }
+
 
 void drawBuildingType3()
 {
@@ -223,11 +243,21 @@ void drawBuildingType4() {
 void drawWindowBuilding5()
 {
 	glBegin(GL_POLYGON);
-	glColor3f(0.9608, 0.9608, 0.8627);
-	glVertex3f(-6.8, 7.4, 0.0);
-	glVertex3f(-6.4, 7.4, 0.0);
-	glVertex3f(-6.4, 7.8, 0.0);
-	glVertex3f(-6.8, 7.8, 0.0);
+		glColor3f(0.9608, 0.9608, 0.8627);
+		glVertex3f(-6.8, 7.4, 0.0);
+		glVertex3f(-6.4, 7.4, 0.0);
+		glVertex3f(-6.4, 7.8, 0.0);
+		glVertex3f(-6.8, 7.8, 0.0);
+	glEnd();
+}
+
+void drawDoorBuilding5() {
+	glBegin(GL_POLYGON);
+		glColor3f(1.0, 1.0, 1.0);
+		glVertex3f(-4.2, -5.0, 0.0);
+		glVertex3f(-3.8, -5.0, 0.0);
+		glVertex3f(-3.8, -4.4, 0.0);
+		glVertex3f(-4.2, -4.4, 0.0);
 	glEnd();
 }
 
@@ -250,9 +280,35 @@ void drawBuildingType5()
 			glTranslatef(-5.72, -0.52, 0);
 		}
 	glPopMatrix();
+	drawDoorBuilding5();
+}
 
-	
-	
+void drawBuildingType6() {
+	glPushMatrix();
+		glScalef(0.9, 0.7, 0);
+		glTranslatef(-25, -2.15, 0);
+		drawBuildingType5();
+	glPopMatrix();
+}
+
+void drawBuildingType7() {
+	glBegin(GL_POLYGON);
+		glColor3f(0.2588, 0.1922, 0.5373);
+		glVertex3f(15, -5.0, 0.0);
+		glVertex3f(18, -5.0, 0.0);
+		glVertex3f(18, 6.0, 0.0);
+		glVertex3f(15, 6.0, 0.0);
+	glEnd();
+}
+
+void drawBuildingType8() {
+	glBegin(GL_POLYGON);
+	glColor3f(0.1922, 0.0, 0.3843);
+	glVertex3f(-2, -5.0, 0.0);
+	glVertex3f(0, -5.0, 0.0);
+	glVertex3f(0, 7.5, 0.0);
+	glVertex3f(-2, 7.5, 0.0);
+	glEnd();
 }
 
 //render method (callback-function)
@@ -280,7 +336,44 @@ void display()
 
 	
 	glPushMatrix();
+		glPushMatrix();
+			drawBuildingType7();
+			glTranslatef(-8, 0, 0);
+			drawBuildingType7();
+			glTranslatef(-6, 0, 0);
+			drawBuildingType7();
+			glTranslatef(-10, 0, 0);
+			drawBuildingType7();
+			glTranslatef(-10, 0, 0);
+			drawBuildingType7();
+		glPopMatrix();
+
+		glPushMatrix();
+			drawBuildingType8();
+			glTranslatef(-7.0, 0, 0);
+			drawBuildingType8();
+			glTranslatef(-7.0, 0, 0);
+			drawBuildingType8();
+			glTranslatef(-7.0, 0, 0);
+			drawBuildingType8();
+			glTranslatef(25.0, 0, 0);
+			drawBuildingType8();
+			glTranslatef(7.0, 0, 0);
+			drawBuildingType8();
+			glTranslatef(8.0, 0, 0);
+			drawBuildingType8();
+
+		glPopMatrix();
+		
+		glPushMatrix();
+			glTranslatef(8.0, 0.0, 0.0);
+			drawBuildingType6();
+		glPopMatrix();
 		drawBuildingType5();
+		glPushMatrix();
+			glTranslatef(11.0, 0.0, 0.0);
+			drawBuildingType5();
+		glPopMatrix();
 		drawBuildingType4();
 		glTranslatef(-17.5, 0.0, 0.0);
 		drawBuildingType1();
@@ -333,10 +426,8 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
 	//initialize window size and position. open window
-	//glutInitWindowSize(960, 480);
-	glutInitWindowSize(1920, 960);
-	//glutInitWindowPosition(960, 405);
-	glutInitWindowPosition(0, 0);
+	glutInitWindowSize(960, 480);
+	glutInitWindowPosition(40, 40);
 	glutCreateWindow("OpenGL - CGR");
 
 	//call initialization routine
