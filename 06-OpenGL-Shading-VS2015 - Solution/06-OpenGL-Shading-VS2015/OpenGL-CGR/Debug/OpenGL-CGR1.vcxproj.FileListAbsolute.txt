@@ -1,0 +1,2 @@
+\\Mac\Home\Desktop\06-OpenGL-Shading-VS2015\OpenGL-CGR\Debug\OpenGL-CGR.exe
+\\Mac\Home\Desktop\06-OpenGL-Shading-VS2015\OpenGL-CGR\Debug\OpenGL-CGR.pdb
