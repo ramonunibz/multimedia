@@ -7,8 +7,8 @@
 GLUquadricObj* quadratic = gluNewQuadric();
 
 //ROTATION_SPEED1 and ROTATION_SPEED2 can be used to change the rotation speed of the two small outer spheres
-#define ROTATION_SPEED1 -150.0
-#define ROTATION_SPEED2 -300.0
+#define ROTATION_SPEED1 -50.0
+#define ROTATION_SPEED2 -100.0
 
 
 //materialSpecular and materialShininess can be used to change the initial settings of the light source
@@ -45,7 +45,7 @@ static int observerSystem = 0;
 static GLfloat angleX = 45; 
 static GLfloat angleY = -150; 
 static float moving, startx, starty;
-static float part1 = 0, part2 = -45, part3 = -45, part4 = -45, part5 = -45;
+static float part1 = 0, part2 = -45, part3 = -45, part31 = 0, part4 = -45, part5 = -45;
 
 //window size parameters
 static int windowWidth = 320*3;
@@ -102,18 +102,28 @@ double calcElapsedTime() {
 bool flag1 = TRUE;
 bool flag2 = TRUE;
 
+void reset() {
+	flag1 = TRUE;
+	flag2 = TRUE;
+}
+
 void animate(double diffTime) {
 	if (flag1) {
-		if (part4 < -90) {
+		if (part4 < -100) {
 			flag1 = FALSE;
 		}
 		part4 += diffTime * ROTATION_SPEED1;
+		part31 += diffTime * ROTATION_SPEED2;
 	}
 	if (!flag1 && flag2) {
 		if (part4 > -45) {
 			flag2 = FALSE;
 		}
 		part4 -= diffTime * ROTATION_SPEED1;
+		part31 -= diffTime * ROTATION_SPEED2;
+	}
+	if (!flag1 && !flag2) {
+		reset();
 	}
 }
 
@@ -128,7 +138,6 @@ void calcFPS(double diffTime) {
 		glutSetWindowTitle(buffer);
 	    elapsedTime = 0.0;
 		frames = 0;
-
 	}
 }
 
@@ -151,7 +160,6 @@ static void renderRobot(double x, double y, double z) {
 		glPushMatrix();
 			glTranslatef(0.0, 0.3, 0.0);
 			glRotatef(90, 0.0, 0.0, 1.0);
-			glRotatef((GLfloat)part1, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
@@ -166,6 +174,7 @@ static void renderRobot(double x, double y, double z) {
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
 			glRotatef((GLfloat)part3, 0.0, 0.0, 1.0);
+			glRotatef((GLfloat)part31, 1.0, 0.0, 0.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
