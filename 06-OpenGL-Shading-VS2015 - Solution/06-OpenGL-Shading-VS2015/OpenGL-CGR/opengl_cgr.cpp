@@ -44,8 +44,8 @@ static int observerSystem = 0;
 //scene rotation parameters
 static GLfloat angleX = 45; 
 static GLfloat angleY = -150; 
-static int moving, startx, starty;
-static int shoulder = 0, elbow = 0;
+static float moving, startx, starty;
+static float part1 = 0, part2 = -45, part3 = -45, part4 = -45, part5 = -45;
 
 //window size parameters
 static int windowWidth = 320*3;
@@ -99,9 +99,22 @@ double calcElapsedTime() {
 	return diffTime;
 }
 
+bool flag1 = TRUE;
+bool flag2 = TRUE;
+
 void animate(double diffTime) {
-	angleX += diffTime * ROTATION_SPEED1;
-	angleY += diffTime * ROTATION_SPEED2;
+	if (flag1) {
+		if (part4 < -90) {
+			flag1 = FALSE;
+		}
+		part4 += diffTime * ROTATION_SPEED1;
+	}
+	if (!flag1 && flag2) {
+		if (part4 > -45) {
+			flag2 = FALSE;
+		}
+		part4 -= diffTime * ROTATION_SPEED1;
+	}
 }
 
 void calcFPS(double diffTime) {
@@ -132,18 +145,41 @@ static void renderBase(double x, double y, double z) {
 
 static void renderRobot(double x, double y, double z) {
 	glPushMatrix();
+		glTranslatef(0.0, -3.0, 0.0);
 		renderBase(0, 0, 0);
 		glTranslated(x, y, z);
 		glPushMatrix();
-			glTranslatef(0.0, 0, 0.0);
-			glRotatef((GLfloat)shoulder, 0.0, 0.0, 1.0);
+			glTranslatef(0.0, 0.3, 0.0);
+			glRotatef(90, 0.0, 0.0, 1.0);
+			glRotatef((GLfloat)part1, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
 				glutWireCube(1.0);
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
-			glRotatef((GLfloat)elbow, 0.0, 0.0, 1.0);
+			glRotatef((GLfloat)part2, 0.0, 0.0, 1.0);
+			glTranslatef(1.0, 0.0, 0.0);
+			glPushMatrix();
+				glScalef(2.0, 0.4, 1.0);
+				glutWireCube(1.0);
+			glPopMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef((GLfloat)part3, 0.0, 0.0, 1.0);
+			glTranslatef(1.0, 0.0, 0.0);
+			glPushMatrix();
+				glScalef(2.0, 0.4, 1.0);
+				glutWireCube(1.0);
+			glPopMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef((GLfloat)part4, 0.0, 0.0, 1.0);
+			glTranslatef(1.0, 0.0, 0.0);
+			glPushMatrix();
+				glScalef(2.0, 0.4, 1.0);
+				glutWireCube(1.0);
+			glPopMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef((GLfloat)part5, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
@@ -179,8 +215,6 @@ static void display(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderRobot(0.0, 0.0, 0.0);
 	glutSwapBuffers();
-
-
 }
 
 
@@ -206,7 +240,7 @@ static void keyboard(unsigned char key, int x, int y)
 {
 	switch (key) 
 	{
-		case 27:
+		case 1:
 			exit(0);
 			break;
 	}
