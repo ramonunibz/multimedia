@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <ProjectOutputs>\\Mac\Home\Desktop\06-OpenGL-Shading-VS2015\OpenGL-CGR\Debug\OpenGL-CGR.exe</ProjectOutputs>
-  <ContentFiles></ContentFiles>
-  <SatelliteDlls></SatelliteDlls>
-  <NonRecipeFileRefs></NonRecipeFileRefs>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\user\Desktop\Alessio\UNI\Computer Science\multimedia\multimedia\06-OpenGL-Shading-VS2015 - Solution\06-OpenGL-Shading-VS2015\OpenGL-CGR\Debug\OpenGL-CGR.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
 </Project>

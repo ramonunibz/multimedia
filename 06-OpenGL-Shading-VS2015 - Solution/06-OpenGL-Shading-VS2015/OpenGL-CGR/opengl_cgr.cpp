@@ -4,10 +4,12 @@
 #include <time.h>
 #include <math.h>
 #include <windows.h>
+GLUquadricObj* quadratic = gluNewQuadric();
 
 //ROTATION_SPEED1 and ROTATION_SPEED2 can be used to change the rotation speed of the two small outer spheres
 #define ROTATION_SPEED1 -150.0
 #define ROTATION_SPEED2 -300.0
+
 
 //materialSpecular and materialShininess can be used to change the initial settings of the light source
 static const GLfloat materialSpecular[] = {1.0, 0.0, 0.0, 1.0};
@@ -40,13 +42,14 @@ static int pause = 1;
 static int observerSystem = 0;
 
 //scene rotation parameters
-static GLfloat angleX = 30; 
+static GLfloat angleX = 45; 
 static GLfloat angleY = -150; 
 static int moving, startx, starty;
+static int shoulder = 0, elbow = 0;
 
 //window size parameters
-static int windowWidth = 320;
-static int windowHeight = 240;
+static int windowWidth = 320*3;
+static int windowHeight = 240*3;
 
 static int frames = 0;
 static double elapsedTime = 0.0;
@@ -74,6 +77,10 @@ static void renderSphere(double radius, double x, double y, double z)
 		glutSolidTeapot(radius * 2);
 	glPopMatrix();
 }
+
+
+
+static void renderRobot(){}
 
 //helper function to set materials (diffuse and ambient color) in a little bit "nicer" way
 void setMaterial(const GLfloat *materialDiffuse, const GLfloat *materialAmbient)
@@ -112,37 +119,72 @@ void calcFPS(double diffTime) {
 	}
 }
 
+static void renderBase(double x, double y, double z) {
+	//renders a cylinder at the specified position
+	setMaterial(white, white);
+	glPushMatrix();
+		glScalef(5.0, -0.2, 1.0);
+		glTranslated(x, y, z);
+		glRotatef(90, 1, 0, 0);
+		gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+	glPopMatrix();
+}
+
+static void renderRobot(double x, double y, double z) {
+	glPushMatrix();
+		renderBase(0, 0, 0);
+		glTranslated(x, y, z);
+		glPushMatrix();
+			glTranslatef(0.0, 0, 0.0);
+			glRotatef((GLfloat)shoulder, 0.0, 0.0, 1.0);
+			glTranslatef(1.0, 0.0, 0.0);
+			glPushMatrix();
+				glScalef(2.0, 0.4, 1.0);
+				glutWireCube(1.0);
+			glPopMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef((GLfloat)elbow, 0.0, 0.0, 1.0);
+			glTranslatef(1.0, 0.0, 0.0);
+			glPushMatrix();
+				glScalef(2.0, 0.4, 1.0);
+				glutWireCube(1.0);
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
+}
+
 //renders the whole scene conatining three spheres (two small and one larger sphere)
 static void display(void) 
 {
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	double diffTime = calcElapsedTime();
 	animate(diffTime);
 
 	calcFPS(diffTime);
-
+	
 	glTranslated(scenePosition[0], scenePosition[1], scenePosition[2]);
 
-	//glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	setMaterial(blue, darkGray);
-	renderSphere(1.0, 0, 0, 0.0);
-
-	glPushMatrix();
-	    glRotated(angleY, 0.0, 1.0, 0.0);
-		setMaterial(red, darkGray);
-		renderSphere(0.5, -3, 0.0, 0.0);
-	glPopMatrix();
-
+	/*//glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glPushMatrix();
 		glRotated(angleX, 1.0, 0.0, 0.0);
-		setMaterial(green, darkGray);
-		renderSphere(0.5, 0, 2, 0.0);
+		glScalef(2.0, 1.0, 1.0);
+		setMaterial(blue, darkGray);
+		renderBase(3, 0, 0, 0);
 	glPopMatrix();
 	
 	glutSwapBuffers();
+	*/
+	glClear(GL_COLOR_BUFFER_BIT);
+	renderRobot(0.0, 0.0, 0.0);
+	glutSwapBuffers();
+
+
 }
+
+
+
 
 
 

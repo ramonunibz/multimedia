@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Sonstige Dateien",
+      "ColorIndex": -1
+    },
+    "249ed670-7029-4e84-97fe-56bf8d853b26": {
+      "ProjectGuid": "249ed670-7029-4e84-97fe-56bf8d853b26",
+      "DisplayName": "OpenGL-CGR",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
