@@ -7,8 +7,8 @@
 GLUquadricObj* quadratic = gluNewQuadric();
 
 //ROTATION_SPEED1 and ROTATION_SPEED2 can be used to change the rotation speed of the two small outer spheres
-#define ROTATION_SPEED1 -50.0
-#define ROTATION_SPEED2 -100.0
+static float ROTATION_SPEED1 = -50.0;
+static float ROTATION_SPEED2 = -100.0;
 
 
 //materialSpecular and materialShininess can be used to change the initial settings of the light source
@@ -36,15 +36,15 @@ static GLdouble rotationMatrix[] = {1.0, 0.0, 0.0, 0.0,
 static GLfloat lightPosition[] = {1.0, 1.0, 1.0, 0.0};
 
 //pause is used to stop or resume the animation
-static int pause = 1;
+//static int pause = 1;
 
 //observerSystem defines if the light source is relative to the obeserver coordinate system or the sphere coordinate system
-static int observerSystem = 0;
+//static int observerSystem = 0;
 
 //scene rotation parameters
-static GLfloat angleX = 45; 
+/*static GLfloat angleX = 45;
 static GLfloat angleY = -150; 
-static float moving, startx, starty;
+static float moving, startx, starty;*/
 static float part1 = 0, part2 = -45, part3 = -45, part31 = 0, part4 = -45, part5 = -45;
 
 //window size parameters
@@ -69,14 +69,14 @@ static void init(void)
 }
 
 //renders a sphere with the given radius at the specified position
-static void renderSphere(double radius, double x, double y, double z) 
+/*static void renderSphere(double radius, double x, double y, double z)
 {
 	glPushMatrix();
 		glTranslated(x, y, z);
 		//glutSolidSphere(radius, 20, 16);
 		glutSolidTeapot(radius * 2);
 	glPopMatrix();
-}
+}*/
 
 
 
@@ -249,8 +249,13 @@ static void keyboard(unsigned char key, int x, int y)
 {
 	switch (key) 
 	{
-		case 1:
-			exit(0);
+		case 'v':
+			ROTATION_SPEED1 *= 2;
+			ROTATION_SPEED2 *= 2;
+			break;
+		case 's':
+			ROTATION_SPEED1 /= 2;
+			ROTATION_SPEED2 /= 2;
 			break;
 	}
 }
