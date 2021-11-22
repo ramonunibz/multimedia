@@ -168,11 +168,11 @@ static void renderBase(double x, double y, double z) {
 
 static void renderWheight(double x, double y, double z) {
 	//renders a cylinder at the specified position
-	setMaterial(black, white);
+	setMaterial(white, white);
 	glPushMatrix();
 		glTranslated(x, y, z);
 		glPushMatrix();
-			glScalef(3, 0.5, 0.3);
+			glScalef(3, 0.5, 0.5);
 			glRotatef(90, 0, 1, 0);
 			gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
 		glPopMatrix();
@@ -184,6 +184,41 @@ static void renderWheight(double x, double y, double z) {
 				gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
 				glTranslated(0, 0, 20);
 				gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+				glPushMatrix();
+					//big plate
+					glScalef(0.3, 0.3, 1);
+					glRotatef(90, 0, 0, 1);
+					drawCircle();
+					glTranslatef(0, 0, 1.5);
+					drawCircle();
+					//medium plate
+					glScalef(0.5, 0.7, 1);
+					drawCircle();
+					glTranslatef(0, 0, 1.5);
+					drawCircle();
+					//small plate
+					glScalef(1.2,1.2,1);
+					drawCircle();
+					glTranslatef(0, 0, 3);
+					drawCircle();
+					//other sides small plate
+					glTranslatef(0, 0, -29.9);
+					drawCircle();
+					glTranslatef(0, 0, 1.5);
+					drawCircle();
+					//medium Plate
+					glTranslatef(0, 0, 0.1);
+					glScalef(1.3, 1.2, 1);
+					drawCircle();
+					glTranslatef(0, 0, 1.5);
+					drawCircle();
+					//big plate
+					glTranslatef(0, 0, 1.0);
+					glScalef(1.25, 1.0, 1);
+					drawCircle();
+					glTranslatef(0, 0, 1.5);
+					drawCircle();
+				glPopMatrix();
 				glPushMatrix();
 					glTranslatef(0, 0, 2);
 					glScalef(1, 0.8, 1);
@@ -206,6 +241,7 @@ static void renderWheight(double x, double y, double z) {
 }
 
 static void renderRobot(double x, double y, double z) {
+	setMaterial(darkGray, darkGray);
 	glPushMatrix();
 		glTranslatef(0.0, -3.0, 0.0);
 		renderBase(0, 0, 0);
@@ -254,8 +290,8 @@ static void renderRobot(double x, double y, double z) {
 			glPopMatrix();
 			glPushMatrix();
 				glRotatef(90, 0, 0, 1);
-				glTranslatef(0, 0, 0);
-				glScalef(0.5, 0.5, 1);
+				glTranslatef(0, -0.4, 0);
+				glScalef(0.4, 0.4, 1);
 				renderWheight(-3.5, -2.5, 0);
 			glPopMatrix();
 		glPopMatrix();
@@ -277,18 +313,11 @@ static void display(void)
 	
 	glTranslated(scenePosition[0], scenePosition[1], scenePosition[2]);
 
-	/*//glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glPushMatrix();
-		glRotated(angleX, 1.0, 0.0, 0.0);
-		glScalef(2.0, 1.0, 1.0);
-		setMaterial(blue, darkGray);
-		renderBase(3, 0, 0, 0);
-	glPopMatrix();
-	
-	glutSwapBuffers();
-	*/
+	//glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderRobot(0.0, 0.0, 0.0);
+	//renderWheight(0,0,0);
 	glutSwapBuffers();
 }
 
@@ -323,6 +352,7 @@ static void keyboard(unsigned char key, int x, int y)
 			ROTATION_SPEED1 /= 2;
 			ROTATION_SPEED2 /= 2;
 			break;
+
 	}
 }
 
