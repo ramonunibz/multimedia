@@ -157,7 +157,7 @@ void calcFPS(double diffTime) {
 
 static void renderBase(double x, double y, double z) {
 	//renders a cylinder at the specified position
-	setMaterial(white, white);
+	setMaterial(red, red);
 	glPushMatrix();
 		glScalef(5.0, -0.2, 1.0);
 		glTranslated(x, y, z);
@@ -241,7 +241,6 @@ static void renderWheight(double x, double y, double z) {
 }
 
 static void renderRobot(double x, double y, double z) {
-	setMaterial(darkGray, darkGray);
 	glPushMatrix();
 		glTranslatef(0.0, -3.0, 0.0);
 		renderBase(0, 0, 0);
@@ -290,7 +289,7 @@ static void renderRobot(double x, double y, double z) {
 			glPopMatrix();
 			glPushMatrix();
 				glRotatef(90, 0, 0, 1);
-				glTranslatef(0, -0.4, 0);
+				glTranslatef(0.2, -0.4, 0);
 				glScalef(0.4, 0.4, 1);
 				renderWheight(-3.5, -2.5, 0);
 			glPopMatrix();
