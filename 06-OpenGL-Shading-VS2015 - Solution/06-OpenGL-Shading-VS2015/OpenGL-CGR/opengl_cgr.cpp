@@ -33,7 +33,7 @@ static GLdouble rotationMatrix[] = {1.0, 0.0, 0.0, 0.0,
 	0.0, 0.0, 0.0, 1.0};
 
 //use lightPosition to change the light position in the scene
-static GLfloat lightPosition[] = {1.0, 1.0, 1.0, 0.0};
+static GLfloat lightPosition[] = {2.0, 2.0, 4.0, 0.0};
 
 //pause is used to stop or resume the animation
 //static int pause = 1;
@@ -42,9 +42,9 @@ static GLfloat lightPosition[] = {1.0, 1.0, 1.0, 0.0};
 //static int observerSystem = 0;
 
 //scene rotation parameters
-/*static GLfloat angleX = 45;
+static GLfloat angleX = 45;
 static GLfloat angleY = -150; 
-static float moving, startx, starty;*/
+static float moving, startx, starty;
 static float part1 = 0, part2 = -45, part3 = -45, part31 = 0, part4 = -45, part5 = -45;
 
 //window size parameters
@@ -78,8 +78,6 @@ static void init(void)
 	glPopMatrix();
 }*/
 
-
-
 static void renderRobot(){}
 
 //helper function to set materials (diffuse and ambient color) in a little bit "nicer" way
@@ -87,6 +85,21 @@ void setMaterial(const GLfloat *materialDiffuse, const GLfloat *materialAmbient)
 {
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
+}
+
+void drawCircle()
+{
+	int triangleAmount = 180;
+	glBegin(GL_TRIANGLE_FAN);
+	setMaterial(white, white);
+	glVertex3f(0.0, 0.0, 0.0);
+	for (int i = 0; i <= triangleAmount + 1; i++) {
+		glVertex2f(
+			(1.0 * cos(i * 6.28 / triangleAmount)),
+			(1.0 * sin(i * 6.28 / triangleAmount))
+		);
+	}
+	glEnd();
 }
 
 double calcElapsedTime() {
@@ -114,6 +127,7 @@ void animate(double diffTime) {
 		}
 		part4 += diffTime * ROTATION_SPEED1;
 		part31 += diffTime * ROTATION_SPEED2;
+
 	}
 	if (!flag1 && flag2) {
 		if (part4 > -45) {
@@ -152,6 +166,45 @@ static void renderBase(double x, double y, double z) {
 	glPopMatrix();
 }
 
+static void renderWheight(double x, double y, double z) {
+	//renders a cylinder at the specified position
+	setMaterial(black, white);
+	glPushMatrix();
+		glTranslated(x, y, z);
+		glPushMatrix();
+			glScalef(3, 0.5, 0.3);
+			glRotatef(90, 0, 1, 0);
+			gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslated(0.82,0,0);
+			glPushMatrix();
+				glScalef(0.2, 6, 2);
+				glRotatef(90, 0, 1, 0);
+				gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+				glTranslated(0, 0, 20);
+				gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+				glPushMatrix();
+					glTranslatef(0, 0, 2);
+					glScalef(1, 0.8, 1);
+					gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+					glTranslatef(0,0,-24);
+					gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+				glPopMatrix();
+				glPushMatrix();
+					glTranslatef(0, 0, 4);
+					glScalef(1, 0.6, 1);
+					gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+					glTranslatef(0, 0, -28);
+					gluCylinder(quadratic, 0.3, 0.3, 2, 100, 100);
+				glPopMatrix();
+			glPopMatrix();
+			drawCircle;
+		glPopMatrix();
+	glPopMatrix();
+	
+}
+
 static void renderRobot(double x, double y, double z) {
 	glPushMatrix();
 		glTranslatef(0.0, -3.0, 0.0);
@@ -163,14 +216,14 @@ static void renderRobot(double x, double y, double z) {
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
-				glutWireCube(1.0);
+				glutSolidCube(1.0);
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
 			glRotatef((GLfloat)part2, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
-				glutWireCube(1.0);
+				glutSolidCube(1.0);
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
 			glRotatef((GLfloat)part3, 0.0, 0.0, 1.0);
@@ -178,27 +231,40 @@ static void renderRobot(double x, double y, double z) {
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
-				glutWireCube(1.0);
+				glutSolidCube(1.0);
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
 			glRotatef((GLfloat)part4, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
-				glutWireCube(1.0);
+				glutSolidCube(1.0);
 			glPopMatrix();
 			glTranslatef(1.0, 0.0, 0.0);
 			glRotatef((GLfloat)part5, 0.0, 0.0, 1.0);
 			glTranslatef(1.0, 0.0, 0.0);
 			glPushMatrix();
 				glScalef(2.0, 0.4, 1.0);
-				glutWireCube(1.0);
+				glutSolidCube(1.0);
+			glPopMatrix();
+			glPushMatrix();
+				glTranslatef(1.3, 0, 0);
+				glScalef(0.6, 0.4, 0.3);
+				glutSolidCube(1.0);
+			glPopMatrix();
+			glPushMatrix();
+				glRotatef(90, 0, 0, 1);
+				glTranslatef(0, 0, 0);
+				glScalef(0.5, 0.5, 1);
+				renderWheight(-3.5, -2.5, 0);
 			glPopMatrix();
 		glPopMatrix();
+		
+
+		
 	glPopMatrix();
 }
 
-//renders the whole scene conatining three spheres (two small and one larger sphere)
 static void display(void) 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
