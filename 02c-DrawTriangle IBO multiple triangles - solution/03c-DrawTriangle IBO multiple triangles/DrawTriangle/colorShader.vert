@@ -6,5 +6,5 @@ out vec3 color;
 
 void main() {									
   color = inColor;		
-  gl_Position = vec4(inVertex.x, inVertex.y, inVertex.z, 1.0);	
+  gl_Position = vec4(inVertex.x/500, inVertex.y/500, inVertex.z/500, 1.0);	
 }														

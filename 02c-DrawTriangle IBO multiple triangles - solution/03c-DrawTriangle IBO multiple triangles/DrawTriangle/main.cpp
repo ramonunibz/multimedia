@@ -17,8 +17,8 @@ void processInput(GLFWwindow *window);
 #define USE_INDEX_BUFFER 1
 
 #ifdef USE_INDEX_BUFFER
-  #define NUM_VERTICES 6
-  #define NUM_INDICES 9
+  #define NUM_VERTICES 8298
+  #define NUM_INDICES 5532
 #else
   #define NUM_VERTICES 9
 #endif
@@ -35,23 +35,21 @@ int numberVertices;
 int findNumber() {
 	int number=0;
 	std::ifstream myfile;
-	myfile.open("original.obj");
+	myfile.open("result.txt");
 	if (myfile.is_open()) {
 		string line;
 		while (std::getline(myfile, line)) {
-			if (line.empty()) {
-				number++;
-			}
+			number++;
 		}
 		myfile.close();
 	}
-	return number;
+	return number/4*3*3;
 }
 
 
 #ifdef USE_INDEX_BUFFER
-GLfloat vertices[922*3];
-GLfloat colors[922 * 3];
+GLfloat vertices[8298];
+GLfloat colors[11064];
 
  void ReplaceAll(string &str, const string& from, const string& to) {
 	size_t start_pos = 0;
@@ -69,7 +67,7 @@ void createVertices() {
 	myfile.open("original.txt");
 	myResult.open("result.txt");
 	if (myfile.is_open()) {
-		if (myfile.is_open()) {
+		if (myResult.is_open()) {
 			string line;
 			while (getline(myfile, line)) {
 				if (line.rfind("v ", 0) == 0) {
@@ -79,7 +77,7 @@ void createVertices() {
 				if (line.rfind("usemtl ", 0) == 0) {
 					string importantInfo = line.substr(14, line.size());
 					ReplaceAll(importantInfo, string("_"), string(" "));
-					myResult << importantInfo << " 1.0" << endl;
+					myResult << importantInfo << endl;
 				}
 			}
 			myfile.close();
@@ -88,33 +86,31 @@ void createVertices() {
 	}
 }		
 
-void vertexConvertor(string str, GLfloat vertices[], int *vertexPos) {
-	int pos;
+
+int vertexPos = 0;
+
+void vertexConvertor(string str) {
 	string a[3];
 
-
-	// Find position of ':' using find()
+	// Find position of ' ' using find()
 	int pos1 = str.find(" ");
 	string sub1= str.substr(pos1+1, str.size());
 	int pos2 = sub1.find(" ");
-	// Copy substring after pos
-	a[0] = str.substr(0, pos1);
-	a[1] = str.substr(pos1+1, str.find(" "));
-	a[2] = str.substr(pos2, str.size());
+	a[0] = str.substr(0, pos1+1);
+	a[1] = str.substr(pos1+1, pos2+1);
+	a[2] = "0.0";
 
-	// prints the result
-
-
-	pos = *vertexPos;
-	vertices[pos] = stoi(a[0]);
-	pos++;
-	vertices[pos] = stoi(a[0]);
-	pos++;
-	vertices[pos] = stoi(a[0]);
-	pos++;
+	vertices[vertexPos] = stof(a[0]);
+	vertexPos++;
+	vertices[vertexPos] = stof(a[1]);
+	vertexPos++;
+	vertices[vertexPos] = stof(a[2]);
+	vertexPos++;
 }
 
-GLfloat colorConvertor(string rgb) {
+int colorPos = 0;
+
+void colorConvertor(string rgb) {
 	int r, g, b, p = 0;
 	GLfloat newR, newG, newB, newTest=0;
 	float full = 255;
@@ -133,19 +129,40 @@ GLfloat colorConvertor(string rgb) {
 		p++;
 	}
 	p = 0;
-	r = stoi(a[0]);
-	g = stoi(a[1]);
-	b = stoi(a[2]);
+	r = stof(a[0]);
+	g = stof(a[1]);
+	b = stof(a[2]);
 	newR = r / full;
 	newG = g / full;
 	newB = b / full;
-
-	return newTest;
+	colors[colorPos] = newR;
+	colorPos++;
+	colors[colorPos] = newR;
+	colorPos++;
+	colors[colorPos] = newR;
+	colorPos++;
+	colors[colorPos] = 1.0;
+	colorPos++;
+	colors[colorPos] = newG;
+	colorPos++;
+	colors[colorPos] = newG;
+	colorPos++;
+	colors[colorPos] = newG;
+	colorPos++;
+	colors[colorPos] = 1.0;
+	colorPos++;
+	colors[colorPos] = newB;
+	colorPos++;
+	colors[colorPos] = newB;
+	colorPos++;
+	colors[colorPos] = newB;
+	colorPos++;
+	colors[colorPos] = 1.0;
+	colorPos++;
 }
 
 void fillArrays() {
 	int lineCount = 1;
-	int vertexPos = 0;
 	int colorPos = 0;
 	ifstream myfile;
 	myfile.open("result.txt");
@@ -153,12 +170,16 @@ void fillArrays() {
 		string line;
 		while (getline(myfile, line)) {
 			if ((lineCount % 4) != 0) {
-				//cout << "HI" << endl;
-				vertexConvertor(line, vertices, &vertexPos);
+				vertexConvertor(line);
 			}
 			else {
-				
+				colorConvertor(line);
 			}
+			lineCount++;
+		}
+		for (int i = 0; i < (8298 / 3) * 4;i++) {
+			cout << i << endl;
+			cout << colors[i] << endl;
 		}
 	}
 }
@@ -192,7 +213,6 @@ std::string loadFile(const char *fname) {
 }
 
 int loadShaders() {
-
 	int vlength, flength;
 	
 	std::string vertexShaderString = loadFile("colorShader.vert");
@@ -251,8 +271,6 @@ int loadShaders() {
 }
 
 void initBuffers() {
-	createVertices();
-
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -297,6 +315,8 @@ void renderScene() {
 
 
 int main() {
+	createVertices();
+	fillArrays();
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -322,11 +342,6 @@ int main() {
 		std::cout << "Failed to initialize shaders" << std::endl;
 		return -1;
 	}
-
-	int num = findNumber();
-	cout << num;
-	fillArrays();
-	cout << vertices[0];
 	initBuffers();
 	
 	// Main Loop
