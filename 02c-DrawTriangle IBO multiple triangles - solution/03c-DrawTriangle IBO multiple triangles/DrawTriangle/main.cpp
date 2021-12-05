@@ -17,8 +17,8 @@ void processInput(GLFWwindow *window);
 #define USE_INDEX_BUFFER 1
 
 #ifdef USE_INDEX_BUFFER
-  #define NUM_VERTICES 8298
-  #define NUM_INDICES 5532
+  #define NUM_VERTICES 2766
+  #define NUM_INDICES 2766
 #else
   #define NUM_VERTICES 9
 #endif
@@ -50,6 +50,7 @@ int findNumber() {
 #ifdef USE_INDEX_BUFFER
 GLfloat vertices[8298];
 GLfloat colors[11064];
+GLuint indices[2766];
 
  void ReplaceAll(string &str, const string& from, const string& to) {
 	size_t start_pos = 0;
@@ -79,6 +80,14 @@ void createVertices() {
 					ReplaceAll(importantInfo, string("_"), string(" "));
 					myResult << importantInfo << endl;
 				}
+				if (line.rfind("f ", 0) == 0) {
+					string sub1 = line.substr(2, line.size());
+					string one = sub1.substr(0, sub1.find("/"));
+					string sub2 = sub1.substr(sub1.find(" ")+1, sub1.size());
+					string two = sub2.substr(0, sub2.find("/"));
+					string sub3 = sub2.substr(sub2.find(" ") + 1, sub2.find("/"));
+					myResult << one << " " << two << " " << sub3 << endl;
+				}
 			}
 			myfile.close();
 			myResult.close();
@@ -96,7 +105,7 @@ void vertexConvertor(string str) {
 	int pos1 = str.find(" ");
 	string sub1= str.substr(pos1+1, str.size());
 	int pos2 = sub1.find(" ");
-	a[0] = str.substr(0, pos1+1);
+	a[0] = str.substr(0, pos1);
 	a[1] = str.substr(pos1+1, pos2+1);
 	a[2] = "0.0";
 
@@ -161,6 +170,29 @@ void colorConvertor(string rgb) {
 	colorPos++;
 }
 
+int indexPos = 0;
+
+void indexConvertor(string str)
+{
+	string a[3];
+
+	// Find position of ' ' using find()
+	int pos1 = str.find(" ");
+	string sub1 = str.substr(pos1 + 1, str.size());
+	string sub2 = sub1.substr(sub1.find(" ")+1, sub1.size());
+	int pos2 = sub2.find(" ");
+	a[0] = str.substr(0, pos1);
+	a[1] = sub2.substr(0, pos2);
+	a[2] = sub2.substr(sub2.find(" ") + 1, sub2.size());
+	
+	indices[indexPos] = stoi(a[0]);
+	indexPos++;
+	indices[indexPos] = stoi(a[1]);
+	indexPos++;
+	indices[indexPos] = stoi(a[2]);
+	indexPos++;
+}
+
 void fillArrays() {
 	int lineCount = 1;
 	int colorPos = 0;
@@ -169,23 +201,20 @@ void fillArrays() {
 	if (myfile.is_open()) {
 		string line;
 		while (getline(myfile, line)) {
-			if ((lineCount % 4) != 0) {
+			if (lineCount < 4) {
 				vertexConvertor(line);
 			}
-			else {
+			if (lineCount == 4) {
 				colorConvertor(line);
+			}
+			if (lineCount == 5) {
+				indexConvertor(line);
+				lineCount = 0;
 			}
 			lineCount++;
 		}
-		for (int i = 0; i < (8298 / 3) * 4;i++) {
-			cout << i << endl;
-			cout << colors[i] << endl;
-		}
 	}
 }
-
-
-GLuint indices[] = { 0, 1, 2, 1, 3, 4, 2, 4, 5 };
 
 #else
 GLfloat vertices[];
