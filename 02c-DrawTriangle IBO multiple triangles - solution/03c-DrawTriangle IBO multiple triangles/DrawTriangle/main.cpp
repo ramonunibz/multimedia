@@ -2,7 +2,6 @@
 #include <glfw/glfw3.h>
 #include <iostream>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -24,35 +23,45 @@ void processInput(GLFWwindow *window);
 #endif
 
 const unsigned int WIDTH = 800;
-const unsigned int HEIGHT = 600;
+const unsigned int HEIGHT = 900;
 
 int shaderProgram;
 int vertexShader, fragmentShader;
 int positionID, colorID;
-int numberVertices;
-
-//i need this to know how many lines triangles there are
-int findNumber() {
-	int number=0;
-	std::ifstream myfile;
-	myfile.open("result.txt");
-	if (myfile.is_open()) {
-		string line;
-		while (std::getline(myfile, line)) {
-			number++;
-		}
-		myfile.close();
-	}
-	return number/4*3*3;
-}
-
 
 #ifdef USE_INDEX_BUFFER
-GLfloat vertices[8298];
-GLfloat colors[11064];
-GLuint indices[2766];
+GLfloat vertices[NUM_VERTICES * 3];
+GLfloat colors[NUM_VERTICES * 4];
+GLuint indices[NUM_INDICES];
 
- void ReplaceAll(string &str, const string& from, const string& to) {
+
+#else
+GLfloat vertices[] = {
+	-0.5f, -0.5f, 0.0f,	
+	0.0f, -0.5f, 0.0f,
+	-0.25f, 0.0f, 0.0f,
+	-0.25f, 0.0f, 0.0f,
+	0.25f, 0.0f, 0.0f,
+	0.0f, 0.5f, 0.0f, 
+	0.0f,  -0.5f, 0.0f,
+	0.5f,  -0.5f, 0.0f,
+	0.25f, 0.0f, 0.0f
+};
+
+GLfloat colors[] = {
+	1.0f, 0.0f, 0.0f, 1.0f,  
+	0.0f, 1.0f, 0.0f, 1.0f,  
+	0.0f, 0.0f, 1.0f, 1.0f,
+	1.0f, 0.0f, 0.0f, 1.0f,
+	0.0f, 1.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f,
+	1.0f, 0.0f, 0.0f, 1.0f,
+	0.0f, 1.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f
+};
+#endif
+
+void ReplaceAll(string& str, const string& from, const string& to) {
 	size_t start_pos = 0;
 	while ((start_pos = str.find(from, start_pos)) != string::npos) {
 		str.replace(start_pos, from.length(), to);
@@ -83,7 +92,7 @@ void createVertices() {
 				if (line.rfind("f ", 0) == 0) {
 					string sub1 = line.substr(2, line.size());
 					string one = sub1.substr(0, sub1.find("/"));
-					string sub2 = sub1.substr(sub1.find(" ")+1, sub1.size());
+					string sub2 = sub1.substr(sub1.find(" ") + 1, sub1.size());
 					string two = sub2.substr(0, sub2.find("/"));
 					string sub3 = sub2.substr(sub2.find(" ") + 1, sub2.find("/"));
 					myResult << one << " " << two << " " << sub3 << endl;
@@ -93,7 +102,7 @@ void createVertices() {
 			myResult.close();
 		}
 	}
-}		
+}
 
 
 int vertexPos = 0;
@@ -103,15 +112,15 @@ void vertexConvertor(string str) {
 
 	// Find position of ' ' using find()
 	int pos1 = str.find(" ");
-	string sub1= str.substr(pos1+1, str.size());
+	string sub1 = str.substr(pos1 + 1, str.size());
 	int pos2 = sub1.find(" ");
 	a[0] = str.substr(0, pos1);
-	a[1] = str.substr(pos1+1, pos2+1);
+	a[1] = str.substr(pos1 + 1, pos2 + 1);
 	a[2] = "0.0";
 
-	vertices[vertexPos] = stof(a[0]);
+	vertices[vertexPos] = stof(a[0])/250.0-0.650;
 	vertexPos++;
-	vertices[vertexPos] = stof(a[1]);
+	vertices[vertexPos] = stof(a[1])/250.0-0.900;
 	vertexPos++;
 	vertices[vertexPos] = stof(a[2]);
 	vertexPos++;
@@ -121,8 +130,8 @@ int colorPos = 0;
 
 void colorConvertor(string rgb) {
 	int r, g, b, p = 0;
-	GLfloat newR, newG, newB, newTest=0;
-	float full = 255;
+	GLfloat newR, newG, newB, newTest = 0;
+	float full = 255.0;
 	string a[4];
 	string S, T;  // declare string variables  
 	stringstream ss;
@@ -146,23 +155,23 @@ void colorConvertor(string rgb) {
 	newB = b / full;
 	colors[colorPos] = newR;
 	colorPos++;
-	colors[colorPos] = newR;
-	colorPos++;
-	colors[colorPos] = newR;
-	colorPos++;
-	colors[colorPos] = 1.0;
-	colorPos++;
 	colors[colorPos] = newG;
-	colorPos++;
-	colors[colorPos] = newG;
-	colorPos++;
-	colors[colorPos] = newG;
-	colorPos++;
-	colors[colorPos] = 1.0;
 	colorPos++;
 	colors[colorPos] = newB;
 	colorPos++;
+	colors[colorPos] = 1.0;
+	colorPos++;
+	colors[colorPos] = newR;
+	colorPos++;
+	colors[colorPos] = newG;
+	colorPos++;
 	colors[colorPos] = newB;
+	colorPos++;
+	colors[colorPos] = 1.0;
+	colorPos++;
+	colors[colorPos] = newR;
+	colorPos++;
+	colors[colorPos] = newG;
 	colorPos++;
 	colors[colorPos] = newB;
 	colorPos++;
@@ -179,17 +188,17 @@ void indexConvertor(string str)
 	// Find position of ' ' using find()
 	int pos1 = str.find(" ");
 	string sub1 = str.substr(pos1 + 1, str.size());
-	string sub2 = sub1.substr(sub1.find(" ")+1, sub1.size());
+	string sub2 = sub1.substr(sub1.find(" ") + 1, sub1.size());
 	int pos2 = sub2.find(" ");
 	a[0] = str.substr(0, pos1);
-	a[1] = sub2.substr(0, pos2);
+	a[1] = sub1.substr(0, pos2);
 	a[2] = sub2.substr(sub2.find(" ") + 1, sub2.size());
-	
-	indices[indexPos] = stoi(a[0]);
+
+	indices[indexPos] = stoi(a[0])-1;
 	indexPos++;
-	indices[indexPos] = stoi(a[1]);
+	indices[indexPos] = stoi(a[1])-1;
 	indexPos++;
-	indices[indexPos] = stoi(a[2]);
+	indices[indexPos] = stoi(a[2])-1;
 	indexPos++;
 }
 
@@ -213,14 +222,9 @@ void fillArrays() {
 			}
 			lineCount++;
 		}
+		myfile.close();
 	}
 }
-
-#else
-GLfloat vertices[];
-
-GLfloat colors[];
-#endif
 
 unsigned int vbo;
 unsigned int vao;
@@ -242,6 +246,7 @@ std::string loadFile(const char *fname) {
 }
 
 int loadShaders() {
+
 	int vlength, flength;
 	
 	std::string vertexShaderString = loadFile("colorShader.vert");
@@ -300,6 +305,7 @@ int loadShaders() {
 }
 
 void initBuffers() {
+
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -342,7 +348,6 @@ void renderScene() {
 #endif
 }
 
-
 int main() {
 	createVertices();
 	fillArrays();
@@ -371,6 +376,7 @@ int main() {
 		std::cout << "Failed to initialize shaders" << std::endl;
 		return -1;
 	}
+
 	initBuffers();
 	
 	// Main Loop
@@ -378,7 +384,7 @@ int main() {
 	
 		processInput(window);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		renderScene();
 
@@ -387,7 +393,6 @@ int main() {
 	}
 
 	glfwTerminate();
-
 	return 0;
 }
 
